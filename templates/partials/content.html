@@ -1,0 +1,270 @@
+{% load static %} {% block extra_css %}
+
+<!-- DataTables -->
+<link
+  href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="{% static 'libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+<link
+  href="{% static 'libs/datatables.net-select-bs4/css//select.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+
+<!-- Responsive datatable examples -->
+<link
+  href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}"
+  rel="stylesheet"
+  type="text/css"
+/>
+
+{% endblock extra_css %} {% block content %}
+<div class="alert alert-secondary" role="alert">
+  It is recommended to set your AC to {{prediction}} °C for better life quality
+</div>
+<div class="row">
+  <div class="col-sm">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="flex-1 overflow-hidden">
+            <p class="text-truncate font-size-14 mb-2">Current AC</p>
+            
+            <select class="form-select form-select-sm">
+              <option selected>Clim iot 4</option>
+              <option value="1">Other devices pending</option>
+            </select>
+            <hr />
+            <p>{{count}} records available</p>
+          </div>
+          <div class="text-primary ms-auto">
+            <i class="ri-stack-line font-size-24"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="flex-1 overflow-hidden">
+            <p class="text-truncate font-size-14 mb-2">Current Temperature</p>
+            <h4 class="mb-0" id="currentTmp">{{currentTmp}} °C</h4>
+          </div>
+          <div class="text-primary ms-auto">
+            <i class="ri-temp-hot-line font-size-24"></i>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border-top py-3">
+        <div class="text-truncate">
+          <span class="badge badge-soft-{{badgeColor}} font-size-11"
+            ><i class="mdi {{menu}}"> </i> {{Diffdegrees}}°C
+          </span>
+          <span class="text-muted ms-2">{{state}} </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex">
+          <div class="flex-1 overflow-hidden">
+            <p class="text-truncate font-size-14 mb-2">Previous Temperature</p>
+            <h4 class="mb-0" id="prevTmp">{{previousTmp}} °C</h4>
+          </div>
+          <div class="text-primary ms-auto">
+            <i class="ri-temp-hot-fill font-size-24"></i>
+          </div>
+        </div>
+      </div>
+      <div class="card-body border-top py-3">
+        <div class="text-truncate">
+          <span class="badge badge-soft-{{badgeColor}} font-size-11"
+            ><i class="mdi {{menu}}"> </i> {{Diffdegrees}}°C
+          </span>
+          <span class="text-muted ms-2">{{state}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title mb-4">
+          <h2><i class="mdi {{weatherIcon}}"></i>&nbsp {{ExtTemp}}°C</h2>
+        </div>
+        <h6>{{weatherDesc}}</h6>
+        <h6>{{address}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-8">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title mb-4">Temperature average variation</h4>
+
+        <div id="container">
+          <canvas id="population-chart"></canvas>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title mb-4">Temperature Plan</h4>
+          <div data-simplebar style="max-height: 330px">
+            <ul class="list-unstyled activity-wid">
+              <li class="activity-list">
+                <div class="activity-icon avatar-xs">
+                  <span
+                    class="avatar-title bg-soft-primary text-primary rounded-circle"
+                  >
+                    <i class="ri-bar-chart-fill"></i>
+                  </span>
+                </div>
+                <div>
+                  <div>
+                    <h5 class="font-size-13">
+                      From 8:00 am to 12:00 pm
+                    </h5>
+                  </div>
+                  <div>
+                    <p class="text-muted mb-0">
+                      AC works at 25°C
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="activity-list">
+                <div class="activity-icon avatar-xs">
+                  <span
+                    class="avatar-title bg-soft-primary text-primary rounded-circle"
+                  >
+                    <i class="ri-bar-chart-fill"></i>
+                  </span>
+                </div>
+                <div>
+                  <div>
+                    <h5 class="font-size-13">
+                      From 12:00 pm to 13:00 pm
+                    </h5>
+                  </div>
+                  <div>
+                    <p class="text-muted mb-0">
+                      AC shutsdown
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="activity-list">
+                <div class="activity-icon avatar-xs">
+                  <span
+                    class="avatar-title bg-soft-primary text-primary rounded-circle"
+                  >
+                    <i class="ri-bar-chart-fill"></i>
+                  </span>
+                </div>
+                <div>
+                  <div>
+                    <h5 class="font-size-13">
+                      From 13:00 pm to 16:00 pm
+                    </h5>
+                  </div>
+                  <div>
+                    <p class="text-muted mb-0">
+                      AC works at 25°C
+                    </p>
+                  </div>
+                </div>
+              </li>
+              <li class="activity-list">
+                <div class="activity-icon avatar-xs">
+                  <span
+                    class="avatar-title bg-soft-primary text-primary rounded-circle"
+                  >
+                    <i class="ri-bar-chart-fill"></i>
+                  </span>
+                </div>
+                <div>
+                  <div>
+                    <h5 class="font-size-13">
+                      From 16:00 pm to 17:00 pm
+                    </h5>
+                  </div>
+                  <div>
+                    <p class="text-muted mb-0">
+                      AC shutsdown
+                    </p>
+                  </div>
+                </div>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+  $(function () {
+    var $populationChart = $("#population-chart");
+    $.ajax({
+      url: "/api/avg",
+      success: function (data) {
+        console.log("data:");
+        var ctx = $populationChart[0].getContext("2d");
+
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "Temperature variation",
+                backgroundColor: "rgba(255, 255, 255,0.5)",
+                borderColor: "rgb(28, 40, 38)",
+                data: data.data,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            legend: {
+              position: "top",
+            },
+            title: {
+              display: true,
+              text: "Average recorded temperature variation of the year 2021",
+            },
+          },
+        });
+      },
+    });
+  });
+</script>
+
+{% endblock content %} {% block extra_javascript %}
+
+<script src="{% static 'js/init/discrete.js' %}"></script>
+
+
+
+
+{% endblock extra_javascript %}
